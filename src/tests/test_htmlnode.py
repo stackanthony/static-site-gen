@@ -11,14 +11,12 @@ class TestHTMLNode(unittest.TestCase):
     def test_empty_props_to_html(self):
         node = HTMLNode()
 
-        with self.assertRaises(Exception):
-            node.props_to_html()
+        self.assertEqual(node.props_to_html(), "")
     
     def test_props_to_html_no_properties(self):
         node = HTMLNode("a", "test text", props={})
-        
-        with self.assertRaises(Exception):
-            node.props_to_html()
+
+        self.assertEqual(node.props_to_html(), "")
 
     def test_props_to_html(self):
         node = HTMLNode("a", "test text", props={"href" : "https://www.google.com", "target" : "_blank"})
@@ -40,3 +38,6 @@ class TestHTMLNode(unittest.TestCase):
         node = HTMLNode("input", "", props={"type": "text", "value": "input value", "required": True, "maxlength": 10})
         
         self.assertEqual(node.props_to_html(), 'type="text" value="input value" required="True" maxlength="10"')
+
+if __name__ == "__main__":
+    unittest.main()

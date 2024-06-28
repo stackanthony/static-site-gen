@@ -19,8 +19,8 @@ class HTMLNode:
         raise NotImplementedError
 
     def props_to_html(self) -> str:
-        if not self.props:
-            raise Exception("No Props to Parse")
+        if not self.props or self.props is {}:
+            return ""
 
         s: list[str] = []
         for key, value in self.props.items():
