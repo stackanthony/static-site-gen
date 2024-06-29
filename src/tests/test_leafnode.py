@@ -20,7 +20,7 @@ class TestLeafNode(unittest.TestCase):
         self.assertEqual(node.to_html(), expectedHTML)
 
         node_no_props = LeafNode("a", "test")
-        expectedHTML_no_props = '<a >test</a>'
+        expectedHTML_no_props = '<a>test</a>'
         self.assertEqual(node_no_props.to_html(), expectedHTML_no_props)
 
         node_no_tag = LeafNode(value="test")
