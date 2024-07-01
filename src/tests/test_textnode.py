@@ -82,6 +82,43 @@ class TestTextNode(unittest.TestCase):
         expectedHTML = '<img src="www.test.com/image.png"></img>'
         self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
 
+    def test_split_nodes_delimeter(self):
+        node = TextNode("This is text with a `code block` word", "text")
+        new_nodes = TextNode.split_nodes_delimiter([node], "`", "code")
+
+        expectedReturnValue = "[TextNode(This is text with a , text, None), TextNode(code block, code, None), TextNode( word, text, None)]"
+
+        self.assertEqual(str(new_nodes), expectedReturnValue)
+
+    def test_invalid_text_type(self):
+        node = TextNode()
+        with self.assertRaises(ValueError):
+            TextNode.split_nodes_delimiter([node], "`", "fasdjfnsafj")
+
+    def test_invalid_delimeter(self):
+        node = TextNode()
+        with self.assertRaises(ValueError):
+            TextNode.split_nodes_delimiter([node], "asdnsd", "*")
+
+    def test_not_enclosed_delimiter(self):
+        node = TextNode("test this with a `code", "text")
+
+
+        with self.assertRaises(Exception):
+            TextNode.split_nodes_delimiter([node], "`", "code")
+
+    def test_split_nodes_delimiter_mixed_delimiters(self):
+            node = TextNode("This is `code` and **bold** text", "text")
+            split_code_nodes = TextNode.split_nodes_delimiter([node], "`", "code")
+            split_bold_nodes = TextNode.split_nodes_delimiter([node], "**", "bold")
+
+            expected_split_code_nodes = "[TextNode(This is , text, None), TextNode(code, code, None), TextNode( and **bold** text, text, None)]"
+            expected_split_bold_nodes = "[TextNode(This is `code` and , text, None), TextNode(bold, bold, None), TextNode( text, text, None)]"
+            self.assertEqual(str(split_code_nodes), expected_split_code_nodes)
+            self.assertEqual(str(split_bold_nodes), expected_split_bold_nodes)
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
