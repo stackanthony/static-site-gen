@@ -34,6 +34,54 @@ class TestTextNode(unittest.TestCase):
 
         self.assertEqual(node.text_type, "")
 
+    def test_text_node_to_html_node(self):
+        node = TextNode("test", "text")
+
+        expectedHTML = "test"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+
+    def test_bold_text_node(self):
+        node = TextNode("test", "bold")
+
+        expectedHTML = "<b>test</b>"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+
+    def test_italic_text_node(self):
+        node = TextNode("test", "italic")
+
+        expectedHTML = "<i>test</i>"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+
+    def test_code_text_node(self):
+        node = TextNode("test", "code")
+
+        expectedHTML = "<code>test</code>"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+
+    def test_no_link_text_node(self):
+        node = TextNode("test", "link")
+
+        with self.assertRaises(ValueError):
+            node.text_node_to_html_node().to_html()
+
+    def test_link_text_node(self):
+        node = TextNode("test", "link", "google.com")
+
+        expectedHTML = '<a href="google.com">test</a>'
+        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+
+    def test_no_image_text_node(self):
+        node = TextNode("test", "link")
+
+        with self.assertRaises(ValueError):
+            node.text_node_to_html_node().to_html()
+    
+    def test_image_text_node(self):
+        node = TextNode("test", "image", "www.test.com/image.png")
+
+        expectedHTML = '<img src="www.test.com/image.png"></img>'
+        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+
 
 if __name__ == "__main__":
     unittest.main()
