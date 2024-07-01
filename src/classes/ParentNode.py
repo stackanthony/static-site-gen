@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class ParentNode(HTMLNode):
-    def __init__(self, tag: Optional[str] = None, children: list[HTMLNode] | None = None, props: Optional[dict[str, str | bool | int]] = None):
+    def __init__(self, tag: Optional[str] = None, children: list[HTMLNode] | None = None, props: Optional[dict[str, str]] = None):
         super().__init__(tag, children=children, props=props)
 
     def to_html(self):
