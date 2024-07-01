@@ -2,11 +2,11 @@ from src.classes.HTMLNode import HTMLNode
 from typing import Optional
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag: Optional[str] = None, value: str = "", props: Optional[dict[str, str | bool | int]] = None):
+    def __init__(self, tag: Optional[str] = None, value: str = "", props: Optional[dict[str, str]] = None):
         super().__init__(tag, value, props=props)
 
     def to_html(self):
-        if not self.value:
+        if not self.value and self.tag != "img":
             raise ValueError
 
         if not self.tag:
