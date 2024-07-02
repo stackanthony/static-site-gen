@@ -117,6 +117,14 @@ class TestTextNode(unittest.TestCase):
             self.assertEqual(str(split_code_nodes), expected_split_code_nodes)
             self.assertEqual(str(split_bold_nodes), expected_split_bold_nodes)
 
+    def test_split_nodes_image(self):
+        node = TextNode(
+            "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)",
+            "text",
+        )
+
+        TextNode.split_nodes_image([node])
+
 
 
 

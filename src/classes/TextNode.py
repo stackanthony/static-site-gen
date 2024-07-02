@@ -1,6 +1,7 @@
 from typing import Optional, Text
 
 from src.classes.LeafNode import LeafNode
+from src.classes.TextProcessor import TextProcessor
 
 class TextNode:
     def __init__(self, text: str="", text_type: str="", url: Optional[str] = None) -> None:
@@ -62,15 +63,26 @@ class TextNode:
                     node = TextNode(split_node_text)
                     node.text_type = "text" if i % 2 == 0 else text_type
                     new_nodes.append(node)
-            else:
-                raise Exception("No enclosing delimeter in text")
+
+        if not new_nodes:
+            raise Exception("No valid delimeters to split / not properly enclosed")
 
         return new_nodes
     
     @staticmethod
     def split_nodes_image(old_nodes: list['TextNode']) -> list['TextNode']:
-        new_nodes: list['TextNode'] = split_nodes_delimiter(old_nodes, "!", "image")
+        new_nodes: list['TextNode'] = []
 
+        for node in old_nodes:
+            tp = TextProcessor(node.text)
+            images = tp.extract_markdown_images()
+            print(images)
+            # split_nodes_text: list[str] = node.text.split("!")
+            #
+            # for split_node_text in split_nodes_text:
+            #     tp = TextProcessor(split_node_text)
+            #     images = tp.extract_markdown_images()
+            #     print(images)
 
 
 
