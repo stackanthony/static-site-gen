@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Text
 
 from src.classes.LeafNode import LeafNode
 
@@ -59,12 +59,19 @@ class TextNode:
                 # valid delimeter enclosed word
                 
                 for i, split_node_text in enumerate(split_nodes_text):
-                    if i % 2 == 1:
-                        new_nodes.append(TextNode(split_node_text, text_type))
-                        continue
-                    
-                    new_nodes.append(TextNode(split_node_text, "text"))
+                    node = TextNode(split_node_text)
+                    node.text_type = "text" if i % 2 == 0 else text_type
+                    new_nodes.append(node)
             else:
                 raise Exception("No enclosing delimeter in text")
 
         return new_nodes
+    
+    @staticmethod
+    def split_nodes_image(old_nodes: list['TextNode']) -> list['TextNode']:
+        new_nodes: list['TextNode'] = split_nodes_delimiter(old_nodes, "!", "image")
+
+
+
+
+
