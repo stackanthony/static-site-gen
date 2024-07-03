@@ -74,7 +74,15 @@ class TextNode:
         new_nodes: list['TextNode'] = []
 
         for node in old_nodes:
-            split_nodes_text: list[str] = ["!" + v if v[0] == "[" else v for v in node.text.split("!")]
+
+            tp = TextProcessor(node.text)
+            new_node = TextNode(node.text, "text")
+            
+            if not tp.extract_markdown_images():
+                new_nodes.append(new_node)
+                continue
+
+            split_nodes_text: list[str] = ["!" + v if v and v[0] == "[" else v for v in node.text.split("!")]
             
             for split_node_text in split_nodes_text:
                 between_text = split_node_text.split(")")
@@ -86,10 +94,10 @@ class TextNode:
                     if not node_text:
                         continue
 
-                    tp = TextProcessor(node_text)
+                    tp.text = node_text
                     images = tp.extract_markdown_images() 
 
-                    new_node = TextNode(node_text, "text")
+                    new_node.text = node_text
                     
                     if images:
                         new_node.text = images[0][0]
