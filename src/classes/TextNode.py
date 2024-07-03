@@ -58,7 +58,6 @@ class TextNode:
 
             if len(split_nodes_text) > 2:
                 # valid delimeter enclosed word
-                
                 for i, split_node_text in enumerate(split_nodes_text):
                     node = TextNode(split_node_text)
                     node.text_type = "text" if i % 2 == 0 else text_type
@@ -68,22 +67,32 @@ class TextNode:
             raise Exception("No valid delimeters to split / not properly enclosed")
 
         return new_nodes
-    
+
+    # WARNING: Seems like an icky way to complete this, look into a refactor later
     @staticmethod
     def split_nodes_image(old_nodes: list['TextNode']) -> list['TextNode']:
         new_nodes: list['TextNode'] = []
 
         for node in old_nodes:
-            tp = TextProcessor(node.text)
-            images = tp.extract_markdown_images()
-            print(images)
-            # split_nodes_text: list[str] = node.text.split("!")
-            #
-            # for split_node_text in split_nodes_text:
-            #     tp = TextProcessor(split_node_text)
-            #     images = tp.extract_markdown_images()
-            #     print(images)
+            split_nodes_text: list[str] = ["!" + v if v[0] == "[" else v for v in node.text.split("!")]
+            
+            for split_node_text in split_nodes_text:
+                between_text = split_node_text.split(") ")
 
+                if len(between_text) > 1:
+                    between_text[0] += ")"
 
+                for node_text in between_text:
+                    tp = TextProcessor(node_text)
+                    images = tp.extract_markdown_images()
 
+                    new_node = TextNode(node_text, "text")
+                    
+                    if images:
+                        new_node.text = images[0][0]
+                        new_node.text_type = "image"
+                        new_node.url = images[0][1]
 
+                    new_nodes.append(new_node)
+
+        return new_nodes
