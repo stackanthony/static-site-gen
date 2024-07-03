@@ -37,26 +37,26 @@ class TestTextNode(unittest.TestCase):
     def test_text_node_to_html_node(self):
         node = TextNode("test", "text")
 
-        expectedHTML = "test"
-        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+        expected_html = "test"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expected_html)
 
     def test_bold_text_node(self):
         node = TextNode("test", "bold")
 
-        expectedHTML = "<b>test</b>"
-        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+        expected_html = "<b>test</b>"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expected_html)
 
     def test_italic_text_node(self):
         node = TextNode("test", "italic")
 
-        expectedHTML = "<i>test</i>"
-        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+        expected_html = "<i>test</i>"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expected_html)
 
     def test_code_text_node(self):
         node = TextNode("test", "code")
 
-        expectedHTML = "<code>test</code>"
-        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+        expected_html = "<code>test</code>"
+        self.assertEqual(node.text_node_to_html_node().to_html(), expected_html)
 
     def test_no_link_text_node(self):
         node = TextNode("test", "link")
@@ -67,8 +67,8 @@ class TestTextNode(unittest.TestCase):
     def test_link_text_node(self):
         node = TextNode("test", "link", "google.com")
 
-        expectedHTML = '<a href="google.com">test</a>'
-        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+        expected_html = '<a href="google.com">test</a>'
+        self.assertEqual(node.text_node_to_html_node().to_html(), expected_html)
 
     def test_no_image_text_node(self):
         node = TextNode("test", "link")
@@ -79,16 +79,16 @@ class TestTextNode(unittest.TestCase):
     def test_image_text_node(self):
         node = TextNode("test", "image", "www.test.com/image.png")
 
-        expectedHTML = '<img src="www.test.com/image.png"></img>'
-        self.assertEqual(node.text_node_to_html_node().to_html(), expectedHTML)
+        expected_html = '<img src="www.test.com/image.png"></img>'
+        self.assertEqual(node.text_node_to_html_node().to_html(), expected_html)
 
     def test_split_nodes_delimeter(self):
         node = TextNode("This is text with a `code block` word", "text")
         new_nodes = TextNode.split_nodes_delimiter([node], "`", "code")
 
-        expectedReturnValue = "[TextNode(This is text with a , text, None), TextNode(code block, code, None), TextNode( word, text, None)]"
+        expected_return_value = "[TextNode(This is text with a , text, None), TextNode(code block, code, None), TextNode( word, text, None)]"
 
-        self.assertEqual(str(new_nodes), expectedReturnValue)
+        self.assertEqual(str(new_nodes), expected_return_value)
 
     def test_invalid_text_type(self):
         node = TextNode()
@@ -123,7 +123,7 @@ class TestTextNode(unittest.TestCase):
             "text",
         )
 
-        expectedReturnList = [
+        expected_return_list = [
             TextNode("This is text with an ", "text"),
             TextNode("image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
             TextNode(" and another ", "text"),
@@ -132,10 +132,80 @@ class TestTextNode(unittest.TestCase):
             ),
         ]
 
-        self.assertListEqual(TextNode.split_nodes_image([node]), expectedReturnList)
+        self.assertListEqual(TextNode.split_nodes_image([node]), expected_return_list)
 
+    def test_split_nodes_image_no_images(self):
+        node = TextNode("This is plain text with no images.", "text")
 
+        expected_return_list = [
+            TextNode("This is plain text with no images.", "text")
+        ]
 
+        self.assertListEqual(TextNode.split_nodes_image([node]), expected_return_list)
+
+    def test_split_nodes_image_image_at_start(self):
+        node = TextNode(
+            "![image1](http://example.com/1.png) and some text after.",
+            "text"
+        )
+
+        expected_return_list = [
+            TextNode("image1", "image", "http://example.com/1.png"),
+            TextNode(" and some text after.", "text")
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_image([node]), expected_return_list)
+
+    def test_split_nodes_image_image_at_end(self):
+        node = TextNode(
+            "Some text before the image ![image1](http://example.com/1.png)",
+            "text"
+        )
+
+        expected_return_list = [
+            TextNode("Some text before the image ", "text"),
+            TextNode("image1", "image", "http://example.com/1.png")
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_image([node]), expected_return_list)
+
+    def test_split_nodes_image_multiple_text_nodes(self):
+        node1 = TextNode(
+            "First node with ![image1](http://example.com/1.png) and text.",
+            "text"
+        )
+        node2 = TextNode(
+            "Second node with text and ![image2](http://example.com/2.png).",
+            "text"
+        )
+
+        expected_return_list = [
+            TextNode("First node with ", "text"),
+            TextNode("image1", "image", "http://example.com/1.png"),
+            TextNode(" and text.", "text"),
+            TextNode("Second node with text and ", "text"),
+            TextNode("image2", "image", "http://example.com/2.png"),
+            TextNode(".", "text")
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_image([node1, node2]), expected_return_list)
+
+    def test_split_nodes_image_no_text_nodes(self):
+        expected_return_list = []
+
+        self.assertListEqual(TextNode.split_nodes_image([]), expected_return_list)
+
+    def test_split_nodes_image_broken_image_syntax(self):
+        node = TextNode(
+            "This text has a broken image ![image1(http://example.com/1.png) syntax.",
+            "text"
+        )
+
+        expected_return_list = [
+            TextNode("This text has a broken image ![image1(http://example.com/1.png) syntax.", "text")
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_image([node]), expected_return_list)
 
 if __name__ == "__main__":
     unittest.main()
