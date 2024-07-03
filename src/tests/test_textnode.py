@@ -123,7 +123,16 @@ class TestTextNode(unittest.TestCase):
             "text",
         )
 
-        TextNode.split_nodes_image([node])
+        expectedReturnList = [
+            TextNode("This is text with an ", "text"),
+            TextNode("image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+            TextNode(" and another ", "text"),
+            TextNode(
+                "second image", "image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png"
+            ),
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_image([node]), expectedReturnList)
 
 
 
