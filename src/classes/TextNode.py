@@ -77,14 +77,17 @@ class TextNode:
             split_nodes_text: list[str] = ["!" + v if v[0] == "[" else v for v in node.text.split("!")]
             
             for split_node_text in split_nodes_text:
-                between_text = split_node_text.split(") ")
+                between_text = split_node_text.split(")")
 
                 if len(between_text) > 1:
                     between_text[0] += ")"
 
                 for node_text in between_text:
+                    if not node_text:
+                        continue
+
                     tp = TextProcessor(node_text)
-                    images = tp.extract_markdown_images()
+                    images = tp.extract_markdown_images() 
 
                     new_node = TextNode(node_text, "text")
                     
