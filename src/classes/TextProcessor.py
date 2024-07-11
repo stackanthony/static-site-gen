@@ -14,4 +14,15 @@ class TextProcessor:
         if not self.text:
             raise ValueError("No text to process")
         return re.findall(r"\[(.*?)\]\((.*?)\)", self.text)
+    
+    def get_trailing_text(self, delimeter: str) -> str | None:
+        if not self.text:
+            raise ValueError("No text to process")
+
+        trailing_text = self.text.split(delimeter)
+        if len(trailing_text) > 1 and trailing_text[1] != '':
+            return trailing_text[1]
+
+        return None
+
 
