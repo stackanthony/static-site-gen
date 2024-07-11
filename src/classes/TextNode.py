@@ -78,18 +78,22 @@ class TextNode:
                 split_nodes_text = node.text.split("!")
 
                 for split_node_text in split_nodes_text:
-                    tp = TextProcessor(split_node_text)
                     try:
+                        tp = TextProcessor(split_node_text)
                         extract_markdown_links = tp.extract_markdown_links()
+
                         if not extract_markdown_links:
                             new_nodes.append(TextNode(split_node_text, "text"))
                             continue
 
                         new_nodes.append(TextNode(extract_markdown_links[0][0], "image", extract_markdown_links[0][1]))
 
-                        trailing_text = split_node_text.split(")")
-                        if len(trailing_text) > 1 and trailing_text[1] != '':
-                            new_nodes.append(TextNode(trailing_text[1], "text"))
+                        trailing_text = tp.get_trailing_text(")")
+
+                        if not trailing_text:
+                            continue
+
+                        new_nodes.append(TextNode(trailing_text, "text"))
                     except:
                         continue
             else:
@@ -97,3 +101,41 @@ class TextNode:
 
 
         return new_nodes
+
+    @staticmethod
+    def split_nodes_link(old_nodes: list['TextNode']) -> list['TextNode']:
+        new_nodes: list['TextNode'] = []
+
+        for node in old_nodes:
+            try:
+                tp = TextProcessor(node.text)
+                if not tp.extract_markdown_links():
+                    # doesn't contain link
+                    new_nodes.append(node)
+                    continue
+
+                split_nodes_text = node.text.split("[")
+                
+                for split_node_text in split_nodes_text:
+
+                    tp = TextProcessor("[" + split_node_text)
+                    extract_markdown_links = tp.extract_markdown_links()
+
+                    if not extract_markdown_links:
+                        new_nodes.append(TextNode(split_node_text, "text"))
+                        continue
+
+                    new_nodes.append(TextNode(extract_markdown_links[0][0], "link", extract_markdown_links[0][1]))
+
+                    trailing_text = tp.get_trailing_text(")")
+
+                    if not trailing_text:
+                        continue
+
+                    new_nodes.append(TextNode(trailing_text, "text"))
+            except:
+                continue
+
+        return new_nodes
+
+

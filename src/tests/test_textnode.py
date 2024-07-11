@@ -207,5 +207,48 @@ class TestTextNode(unittest.TestCase):
 
         self.assertListEqual(TextNode.split_nodes_image([node]), expected_return_list)
 
+    def test_split_nodes_link(self):
+        node = TextNode("This is text with a link [to my github](https://www.github.com/stackanthony)", "text")
+
+        expected_return_list = [
+            TextNode("This is text with a link ", "text"),
+            TextNode("to my github", "link", "https://www.github.com/stackanthony"),
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
+
+    def test_split_nodes_link_no_links(self):
+        node = TextNode("text with no links", "text")
+
+        expected_return_list = [node]
+
+        self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
+
+    def test_split_nodes_link_multiple_links(self):
+        node = TextNode("This is a [link 1](http://link1.com) and [link 2](http://link2.com)", "text")
+        
+        expected_return_list = [
+            TextNode("This is a ", "text"),
+            TextNode("link 1", "link", "http://link1.com"),
+            TextNode(" and ", "text"),
+            TextNode("link 2", "link", "http://link2.com")
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
+
+    def test_split_nodes_link_malformed(self):
+        node = TextNode("This is a [broken link(http://broken.com)", "text")
+
+        expected_return_list = [node]
+
+        self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
+
+    def test_split_nodes_link_empty_string(self):
+        node = TextNode("", "text")
+
+        expected_return_list = []
+
+        self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
+
 if __name__ == "__main__":
     unittest.main()
