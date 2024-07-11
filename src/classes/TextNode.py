@@ -68,42 +68,32 @@ class TextNode:
 
         return new_nodes
 
-    # WARNING: Seems like an icky way to complete this, look into a refactor later
+
     @staticmethod
     def split_nodes_image(old_nodes: list['TextNode']) -> list['TextNode']:
         new_nodes: list['TextNode'] = []
 
         for node in old_nodes:
+            if TextProcessor(node.text).extract_markdown_images():
+                split_nodes_text = node.text.split("!")
 
-            tp = TextProcessor(node.text)
-            new_node = TextNode(node.text, "text")
-            
-            if not tp.extract_markdown_images():
-                new_nodes.append(new_node)
-                continue
+                for split_node_text in split_nodes_text:
+                    tp = TextProcessor(split_node_text)
+                    try:
+                        extract_markdown_links = tp.extract_markdown_links()
+                        if not extract_markdown_links:
+                            new_nodes.append(TextNode(split_node_text, "text"))
+                            continue
 
-            split_nodes_text: list[str] = ["!" + v if v and v[0] == "[" else v for v in node.text.split("!")]
-            
-            for split_node_text in split_nodes_text:
-                between_text = split_node_text.split(")")
+                        new_nodes.append(TextNode(extract_markdown_links[0][0], "image", extract_markdown_links[0][1]))
 
-                if len(between_text) > 1:
-                    between_text[0] += ")"
-
-                for node_text in between_text:
-                    if not node_text:
+                        trailing_text = split_node_text.split(")")
+                        if len(trailing_text) > 1 and trailing_text[1] != '':
+                            new_nodes.append(TextNode(trailing_text[1], "text"))
+                    except:
                         continue
+            else:
+                new_nodes.append(node)
 
-                    tp.text = node_text
-                    images = tp.extract_markdown_images() 
-
-                    new_node.text = node_text
-                    
-                    if images:
-                        new_node.text = images[0][0]
-                        new_node.text_type = "image"
-                        new_node.url = images[0][1]
-
-                    new_nodes.append(new_node)
 
         return new_nodes
