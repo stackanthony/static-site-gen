@@ -19,8 +19,10 @@ class TextProcessor:
         if not self.text:
             raise ValueError("No text to process")
 
-        trailing_text = self.text.split(delimeter)
+        trailing_text = self.text.split(delimeter, maxsplit=1)
         if len(trailing_text) > 1 and trailing_text[1] != '':
+            if self.extract_markdown_links() or self.extract_markdown_images():
+                trailing_text[0] += delimeter
             return trailing_text[1]
 
         return None
