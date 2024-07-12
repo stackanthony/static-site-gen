@@ -217,6 +217,28 @@ class TestTextNode(unittest.TestCase):
 
         self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
 
+    def test_split_nodes_link_with_trailing_text(self):
+        node = TextNode("This is a link [google](https://google.com) and another link here [yahoo](https://yahoo.com)", "text")
+
+        expected_return_list = [
+            TextNode("This is a link ", "text"),
+            TextNode("google", "link", "https://google.com"),
+            TextNode(" and another link here ", "text"),
+            TextNode("yahoo", "link", "https://yahoo.com")
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
+
+    def test_split_nodes_link_with_leading_text(self):
+        node = TextNode(" and a [link](https://stackanthony.dev)", "text")
+
+        expected_return_list = [
+            TextNode(" and a ", "text"),
+            TextNode("link", "link", "https://stackanthony.dev")
+        ]
+
+        self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
+
     def test_split_nodes_link_no_links(self):
         node = TextNode("text with no links", "text")
 
@@ -226,7 +248,7 @@ class TestTextNode(unittest.TestCase):
 
     def test_split_nodes_link_multiple_links(self):
         node = TextNode("This is a [link 1](http://link1.com) and [link 2](http://link2.com)", "text")
-        
+
         expected_return_list = [
             TextNode("This is a ", "text"),
             TextNode("link 1", "link", "http://link1.com"),
@@ -250,5 +272,22 @@ class TestTextNode(unittest.TestCase):
 
         self.assertListEqual(TextNode.split_nodes_link([node]), expected_return_list)
 
+    def test_text_to_textnodes(self):
+        test_text = "This is **text** with an *italic* word and a `code block` and an ![image](https://obiwan-image) and a [link](https://stackanthony.dev)"
+
+        expected_return_list = [
+            TextNode("This is ", "text"),
+            TextNode("text", "bold"),
+            TextNode(" with an ", "text"),
+            TextNode("italic", "italic"),
+            TextNode(" word and a ", "text"),
+            TextNode("code block", "code"),
+            TextNode(" and an ", "text"),
+            TextNode("image", "image", "https://obiwan-image"),
+            TextNode(" and a ", "text"),
+            TextNode("link", "link", "https://stackanthony.dev"),
+        ]
+
+        self.assertListEqual(TextNode.text_to_textnodes(test_text), expected_return_list)
 if __name__ == "__main__":
     unittest.main()

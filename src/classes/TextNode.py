@@ -39,6 +39,32 @@ class TextNode:
                 raise Exception("Not a valid text type. Couldn't convert to LeafNode")
 
     @staticmethod
+    def text_to_textnodes(text: str) -> list['TextNode']:
+        text_nodes: list['TextNode'] = []
+        initial_node: list['TextNode'] = [TextNode(text, "text")]
+
+        if text == '':
+            return text_nodes
+
+        for bold_node in TextNode.split_nodes_delimiter(initial_node, "**", "bold"):
+            text_nodes.append(bold_node)
+
+        for italic_node in TextNode.split_nodes_delimiter([text_nodes.pop()], "*", "italic"):
+            text_nodes.append(italic_node)
+
+        for code_node in TextNode.split_nodes_delimiter([text_nodes.pop()], "`", "code"):
+            text_nodes.append(code_node)
+
+        for image_node in TextNode.split_nodes_image([text_nodes.pop()]):
+            text_nodes.append(image_node)
+
+        for link_node in TextNode.split_nodes_link([text_nodes.pop()]):
+            text_nodes.append(link_node)
+
+        return text_nodes
+        
+
+    @staticmethod
     def split_nodes_delimiter(old_nodes: list['TextNode'], delimeter: str, text_type: str) -> list['TextNode']:
         new_nodes: list['TextNode'] = []
         text_types: dict[str, str] = {
@@ -79,14 +105,17 @@ class TextNode:
 
                 for split_node_text in split_nodes_text:
                     try:
-                        tp = TextProcessor(split_node_text)
-                        extract_markdown_links = tp.extract_markdown_links()
+                        if split_node_text == "":
+                            continue
 
-                        if not extract_markdown_links:
+                        tp = TextProcessor("!" + split_node_text)
+                        extract_markdown_images = tp.extract_markdown_images()
+
+                        if not extract_markdown_images:
                             new_nodes.append(TextNode(split_node_text, "text"))
                             continue
 
-                        new_nodes.append(TextNode(extract_markdown_links[0][0], "image", extract_markdown_links[0][1]))
+                        new_nodes.append(TextNode(extract_markdown_images[0][0], "image",extract_markdown_images[0][1]))
 
                         trailing_text = tp.get_trailing_text(")")
 
@@ -115,6 +144,7 @@ class TextNode:
                     continue
 
                 split_nodes_text = node.text.split("[")
+
                 
                 for split_node_text in split_nodes_text:
 
