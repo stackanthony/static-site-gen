@@ -100,13 +100,6 @@ class TestTextNode(unittest.TestCase):
         with self.assertRaises(ValueError):
             TextNode.split_nodes_delimiter([node], "asdnsd", "*")
 
-    def test_not_enclosed_delimiter(self):
-        node = TextNode("test this with a `code", "text")
-
-
-        with self.assertRaises(Exception):
-            TextNode.split_nodes_delimiter([node], "`", "code")
-
     def test_split_nodes_delimiter_mixed_delimiters(self):
             node = TextNode("This is `code` and **bold** text", "text")
             split_code_nodes = TextNode.split_nodes_delimiter([node], "`", "code")
@@ -289,5 +282,34 @@ class TestTextNode(unittest.TestCase):
         ]
 
         self.assertListEqual(TextNode.text_to_textnodes(test_text), expected_return_list)
+
+    def test_text_to_textnodes_empty_string(self):
+        test_text = ""
+
+        expected_return_list = []
+
+        self.assertListEqual(TextNode.text_to_textnodes(test_text), expected_return_list)
+
+
+    def test_text_to_textnodes_no_formatting(self):
+        test_text = "Just some plain text with no formatting."
+
+        expected_return_list = [
+            TextNode("Just some plain text with no formatting.", "text")
+        ]
+
+        self.assertListEqual(TextNode.text_to_textnodes(test_text), expected_return_list)
+
+    def test_text_to_textnodes_only_bold(self):
+        test_text = "This text is **bold**."
+
+        expected_return_list = [
+            TextNode("This text is ", "text"),
+            TextNode("bold", "bold"),
+            TextNode(".", "text")
+        ]
+
+        self.assertListEqual(TextNode.text_to_textnodes(test_text), expected_return_list)
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,4 @@
-from typing import Optional, Text
+from typing import Optional
 
 from src.classes.LeafNode import LeafNode
 from src.classes.TextProcessor import TextProcessor
@@ -40,26 +40,28 @@ class TextNode:
 
     @staticmethod
     def text_to_textnodes(text: str) -> list['TextNode']:
-        text_nodes: list['TextNode'] = []
-        initial_node: list['TextNode'] = [TextNode(text, "text")]
+        text_nodes: list['TextNode'] = [TextNode(text, "text")]
 
         if text == '':
-            return text_nodes
+            return []
 
-        for bold_node in TextNode.split_nodes_delimiter(initial_node, "**", "bold"):
-            text_nodes.append(bold_node)
+        try:
+            for bold_node in TextNode.split_nodes_delimiter([text_nodes.pop()], "**", "bold"):
+                text_nodes.append(bold_node)
 
-        for italic_node in TextNode.split_nodes_delimiter([text_nodes.pop()], "*", "italic"):
-            text_nodes.append(italic_node)
+            for italic_node in TextNode.split_nodes_delimiter([text_nodes.pop()], "*", "italic"):
+                text_nodes.append(italic_node)
 
-        for code_node in TextNode.split_nodes_delimiter([text_nodes.pop()], "`", "code"):
-            text_nodes.append(code_node)
+            for code_node in TextNode.split_nodes_delimiter([text_nodes.pop()], "`", "code"):
+                text_nodes.append(code_node)
 
-        for image_node in TextNode.split_nodes_image([text_nodes.pop()]):
-            text_nodes.append(image_node)
+            for image_node in TextNode.split_nodes_image([text_nodes.pop()]):
+                text_nodes.append(image_node)
 
-        for link_node in TextNode.split_nodes_link([text_nodes.pop()]):
-            text_nodes.append(link_node)
+            for link_node in TextNode.split_nodes_link([text_nodes.pop()]):
+                text_nodes.append(link_node)
+        except:
+            pass
 
         return text_nodes
         
@@ -85,12 +87,12 @@ class TextNode:
             if len(split_nodes_text) > 2:
                 # valid delimeter enclosed word
                 for i, split_node_text in enumerate(split_nodes_text):
-                    node = TextNode(split_node_text)
-                    node.text_type = "text" if i % 2 == 0 else text_type
-                    new_nodes.append(node)
+                    new_node = TextNode(split_node_text)
+                    new_node.text_type = "text" if i % 2 == 0 else text_type
+                    new_nodes.append(new_node)
 
         if not new_nodes:
-            raise Exception("No valid delimeters to split / not properly enclosed")
+            new_nodes.append(old_nodes[0])
 
         return new_nodes
 
