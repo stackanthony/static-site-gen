@@ -13,6 +13,14 @@ class Block:
         split_text: list[str] = markdown.split("\n\n")
 
         for text in split_text:
+            if text == "":
+                continue
             blocks.append(Block(text.strip()))
 
         return blocks
+
+    # def block_to_block_type(self) -> Type['Block']:
+    #     pass
+    #     TODO: Use this to call the factory function
+    #
+
