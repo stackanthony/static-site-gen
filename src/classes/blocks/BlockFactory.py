@@ -14,7 +14,8 @@ class BlockFactory:
 
         for block in blocks:
             if Heading.is_heading(block):
-                processed_blocks.append(Heading(block.text))
+                split_block_text = block.text.split(" ", maxsplit=1)
+                processed_blocks.append(Heading(split_block_text[1], len(split_block_text[0])))
             elif Code.is_code(block):
                 processed_blocks.append(Code(block.text))
             elif Quote.is_quote(block):

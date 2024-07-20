@@ -2,9 +2,10 @@ from src.classes.Block import Block
 
 
 class Heading(Block):
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str, count: int) -> None:
         super().__init__(text)
-        self.start_delimeter = text.count("#")
+        self.start_delimeter = "#"
+        self.count = count
 
     @staticmethod
     def is_heading(block: Block) -> bool:
