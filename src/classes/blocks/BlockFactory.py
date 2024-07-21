@@ -17,7 +17,8 @@ class BlockFactory:
                 split_block_text = block.text.split(" ", maxsplit=1)
                 processed_blocks.append(Heading(split_block_text[1], len(split_block_text[0])))
             elif Code.is_code(block):
-                processed_blocks.append(Code(block.text))
+                split_block_text = block.text.split("```")
+                processed_blocks.append(Code(split_block_text[1]))
             elif Quote.is_quote(block):
                 processed_blocks.append(Quote(block.text))
             elif UnorderedList.is_ulist(block):

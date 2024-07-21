@@ -22,7 +22,16 @@ class TestBlockFactory(unittest.TestCase):
         markdown = "```test```"
 
         expected_return_list = [
-            Code(markdown)
+            Code("test")
+        ]
+
+        self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)
+
+    def test_create_blocks_code_complex(self):
+        markdown = "```test1\ntest2\ntest3    faskfnsajdfasf   dfasfjasf\n```"
+
+        expected_return_list = [
+            Code(markdown.split("```")[1])
         ]
 
         self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)
@@ -76,9 +85,9 @@ class TestBlockFactory(unittest.TestCase):
     def test_create_blocks_multiple_code_blocks(self):
         markdown = "```code1```\n\n```code2```\n\n```code3```"
         expected_return_list = [
-            Code("```code1```"),
-            Code("```code2```"),
-            Code("```code3```")
+            Code("code1"),
+            Code("code2"),
+            Code("code3")
         ]
         self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)
 
