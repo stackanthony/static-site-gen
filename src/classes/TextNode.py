@@ -20,7 +20,7 @@ class TextNode:
     def text_node_to_html_node(self) -> LeafNode:
         match self.text_type:
             case "text":
-                return LeafNode(value=self.text)
+                return LeafNode("text", self.text)
             case "bold":
                 return LeafNode("b", self.text)
             case "italic":

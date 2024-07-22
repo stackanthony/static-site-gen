@@ -9,7 +9,7 @@ class LeafNode(HTMLNode):
         if not self.value and self.tag != "img":
             raise ValueError
 
-        if not self.tag:
+        if not self.tag or self.tag == "text":
             return self.value
 
         if not self.props:
