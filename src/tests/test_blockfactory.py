@@ -49,7 +49,7 @@ class TestBlockFactory(unittest.TestCase):
         markdown = "* test1\n* test2\n- test3"
 
         expected_return_list = [
-            UnorderedList(markdown)
+            UnorderedList("test1\ntest2\ntest3\n")
         ]
 
         self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)
@@ -96,7 +96,7 @@ class TestBlockFactory(unittest.TestCase):
         expected_return_list = [
             Heading("Heading", 3),
             Block("This is a paragraph."),
-            UnorderedList("* item1\n* item2"),
+            UnorderedList("item1\nitem2\n"),
             Quote("> Quote")
         ]
 
