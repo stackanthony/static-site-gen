@@ -17,3 +17,17 @@ class UnorderedList(Block):
             return False
 
         return True
+
+    @staticmethod
+    def build_list_items(block_text: str) -> str:
+        s = ""
+
+        split_block_lines = block_text.split("\n")
+
+        for line in split_block_lines:
+            split_line = line.split(" ", maxsplit=1)
+            if split_line[0] != "*" and split_line[0] != "-":
+                continue
+            s += split_line[1] + "\n"
+
+        return s
