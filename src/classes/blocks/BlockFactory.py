@@ -22,7 +22,8 @@ class BlockFactory:
             elif Quote.is_quote(block):
                 processed_blocks.append(Quote(block.text))
             elif UnorderedList.is_ulist(block):
-                processed_blocks.append(UnorderedList(block.text))
+                list_items_str = UnorderedList.build_list_items(block.text)
+                processed_blocks.append(UnorderedList(list_items_str))
             elif OrderedList.is_olist(block):
                 processed_blocks.append(OrderedList(block.text))
             else:
