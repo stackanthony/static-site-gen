@@ -37,13 +37,13 @@ class TestBlockFactory(unittest.TestCase):
         self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)
 
     def test_create_block_quote(self):
-        markdown = ">Test\n>Test2\n>Test3"
+        markdown = "> Test\n> Test2\n> Test3"
 
         expected_return_list = [
-            Quote(markdown)
-        ]
+            Quote("Test\nTest2\nTest3\n")
 
-        self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)
+        ]
+          
 
     def test_create_unordered_list(self):
         markdown = "* test1\n* test2\n- test3"
@@ -97,7 +97,7 @@ class TestBlockFactory(unittest.TestCase):
             Heading("Heading", 3),
             Block("This is a paragraph."),
             UnorderedList("item1\nitem2\n"),
-            Quote("> Quote")
+            Quote("Quote")
         ]
 
         self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)

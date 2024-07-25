@@ -28,7 +28,7 @@ class TestMarkdownProcessor(unittest.TestCase):
 
         expected_return_value = HTMLNode("div", children=[
             HTMLNode("blockquote", children=[
-                LeafNode("text", markdown)
+                LeafNode("text", "quote1\nquote2 sadasd")
             ])
         ])
 
