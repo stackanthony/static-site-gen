@@ -40,9 +40,11 @@ class TestBlockFactory(unittest.TestCase):
         markdown = "> Test\n> Test2\n> Test3"
 
         expected_return_list = [
-            Quote("Test\nTest2\nTest3\n")
+            Quote("Test\nTest2\nTest3")
 
         ]
+
+        self.assertListEqual(BlockFactory.create_blocks(markdown), expected_return_list)
           
 
     def test_create_unordered_list(self):
