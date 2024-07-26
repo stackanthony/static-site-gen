@@ -2,6 +2,7 @@ from src.classes.Block import Block
 from src.classes.blocks.Code import Code
 from src.classes.blocks.Heading import Heading
 from src.classes.blocks.OrderedList import OrderedList
+from src.classes.blocks.Paragraph import Paragraph
 from src.classes.blocks.Quote import Quote
 from src.classes.blocks.UnorderedList import UnorderedList
 
@@ -22,9 +23,9 @@ class BlockFactory:
             elif UnorderedList.is_ulist(block):
                 processed_blocks.append(UnorderedList(block.text).build())
             elif OrderedList.is_olist(block):
-                processed_blocks.append(OrderedList(block.text))
+                processed_blocks.append(OrderedList(block.text).build())
             else:
-                processed_blocks.append(block)
+                processed_blocks.append(Paragraph(block.text))
 
 
         return processed_blocks
