@@ -36,12 +36,9 @@ class MarkdownProcessor:
                 root_node.children.append(new_node)
             elif isinstance(block, UnorderedList):
                 root_list_node = HTMLNode("ul")
-                split_block_text = block.text.split("\n")
 
-                for line in split_block_text:
-                    if line == "" or line == "\n":
-                        continue
-                    child_list_node = HTMLNode("li", line)
+                for item in block.items:
+                    child_list_node = HTMLNode("li", item)
                     root_list_node.children.append(child_list_node)
 
                 root_node.children.append(root_list_node)
