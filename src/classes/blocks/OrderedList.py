@@ -1,10 +1,11 @@
+from typing import Optional
 from src.classes.Block import Block
 
 
 class OrderedList(Block):
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str, items: Optional[list[str]] = None) -> None:
         super().__init__(text)
-        self.start_delimeter = "."
+        self.items = items if items else []
 
     @staticmethod
     def is_olist(block: Block) -> bool:
@@ -32,3 +33,24 @@ class OrderedList(Block):
     @staticmethod
     def _is_incremental(numbers: list[int]) -> bool:
         return numbers == list(range(numbers[0], numbers[0] + len(numbers)))
+
+    @staticmethod
+    def build_list_items(block_text: str) -> list[str]:
+        items: list[str] = []
+
+        split_block_lines: list[str] = block_text.split("\n")
+
+        for line in split_block_lines:
+            split_line: list[str] = line.split(". ", maxsplit=1)
+
+            if len(split_line) < 2:
+                raise ValueError
+
+            items.append(split_line[1])
+            
+        return items
+        
+    def build(self) -> Block:
+        ordered_list_items: list[str] = OrderedList.build_list_items(self.text)
+
+        return OrderedList(self.text, ordered_list_items)

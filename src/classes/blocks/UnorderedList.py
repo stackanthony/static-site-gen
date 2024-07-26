@@ -1,9 +1,11 @@
+from typing import Optional
 from src.classes.Block import Block
 
 
 class UnorderedList(Block):
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str, items: Optional[list[str]] = None) -> None:
         super().__init__(text)
+        self.items = items if items else []
 
     @staticmethod
     def is_ulist(block: Block) -> bool:
@@ -18,7 +20,7 @@ class UnorderedList(Block):
         return True
 
     @staticmethod
-    def build_list_items(block_text: str) -> str:
+    def parse_list_items(block_text: str) -> str:
         s = ""
 
         split_block_lines = block_text.split("\n")
@@ -31,7 +33,23 @@ class UnorderedList(Block):
 
         return s
 
-    def build(self) -> Block:
-        list_items_str = UnorderedList.build_list_items(self.text)
+    @staticmethod
+    def build_list_items(block_text: str) -> list[str]:
 
-        return UnorderedList(list_items_str)
+        items: list[str] = []
+
+        split_block_lines = block_text.split("\n")
+
+        for line in split_block_lines:
+            split_line = line.split(" ", maxsplit=1)
+            if split_line[0] != "*" and split_line[0] != "-":
+                continue
+            items.append(split_line[1]) 
+
+        return items
+
+    def build(self) -> Block:
+        list_items_str = UnorderedList.parse_list_items(self.text)
+        list_items = UnorderedList.build_list_items(self.text)
+
+        return UnorderedList(list_items_str, list_items)
