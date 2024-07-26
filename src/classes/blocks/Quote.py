@@ -4,7 +4,6 @@ from src.classes.Block import Block
 class Quote(Block):
     def __init__(self, text: str) -> None:
         super().__init__(text)
-        self.start_delimeter = ">"
 
     @staticmethod
     def is_quote(block: Block) -> bool:
@@ -29,4 +28,9 @@ class Quote(Block):
             s += split_line[1] + "\n"
 
         return s[:-1]
+
+    def build(self) -> Block:
+        quote_items_str = Quote.parse_quote_items(self.text)
+
+        return Quote(quote_items_str)
     

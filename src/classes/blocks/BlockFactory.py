@@ -14,16 +14,13 @@ class BlockFactory:
 
         for block in blocks:
             if Heading.is_heading(block):
-                split_block_text = block.text.split(" ", maxsplit=1)
-                processed_blocks.append(Heading(split_block_text[1], len(split_block_text[0])))
+                processed_blocks.append(Heading(block.text).build())
             elif Code.is_code(block):
-                split_block_text = block.text.split("```")
-                processed_blocks.append(Code(split_block_text[1]))
+                processed_blocks.append(Code(block.text).build())
             elif Quote.is_quote(block):
-                processed_blocks.append(Quote(block.text))
+                processed_blocks.append(Quote(block.text).build())
             elif UnorderedList.is_ulist(block):
-                list_items_str = UnorderedList.build_list_items(block.text)
-                processed_blocks.append(UnorderedList(list_items_str))
+                processed_blocks.append(UnorderedList(block.text).build())
             elif OrderedList.is_olist(block):
                 processed_blocks.append(OrderedList(block.text))
             else:

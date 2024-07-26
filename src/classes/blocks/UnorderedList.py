@@ -4,7 +4,6 @@ from src.classes.Block import Block
 class UnorderedList(Block):
     def __init__(self, text: str) -> None:
         super().__init__(text)
-        self.start_delimeter = {"*", "-"}
 
     @staticmethod
     def is_ulist(block: Block) -> bool:
@@ -31,3 +30,8 @@ class UnorderedList(Block):
             s += split_line[1] + "\n"
 
         return s
+
+    def build(self) -> Block:
+        list_items_str = UnorderedList.build_list_items(self.text)
+
+        return UnorderedList(list_items_str)

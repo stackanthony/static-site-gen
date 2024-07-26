@@ -1,3 +1,6 @@
+from abc import abstractmethod
+
+
 class Block:
     def __init__(self, text: str) -> None:
         self.text = text
@@ -18,3 +21,7 @@ class Block:
             blocks.append(Block(text.strip()))
 
         return blocks
+    
+    @abstractmethod
+    def build(self) -> 'Block':
+        pass
