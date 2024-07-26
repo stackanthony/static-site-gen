@@ -42,5 +42,19 @@ class MarkdownProcessor:
                     root_list_node.children.append(child_list_node)
 
                 root_node.children.append(root_list_node)
+            elif isinstance(block, OrderedList):
+                root_list_node = HTMLNode("ol")
+
+                for item in block.items:
+                    child_list_node = HTMLNode("li", item)
+                    root_list_node.children.append(child_list_node)
+
+                root_node.children.append(root_list_node)
+            else:
+                new_node = HTMLNode("p", children=[
+                    TextNode(block.text, "text").text_node_to_html_node()
+                ])
+
+                root_node.children.append(new_node)
 
         return root_node

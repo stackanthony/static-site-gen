@@ -48,3 +48,29 @@ class TestMarkdownProcessor(unittest.TestCase):
 
         mp = MarkdownProcessor(markdown)
         self.assertEqual(mp.markdown_to_html_node(), expected_return_value)
+
+    def test_ordered_list_markdown(self):
+        markdown = "1. First item\n2. Second item\n3. Third item"
+
+        expected_return_value = HTMLNode("div", children=[
+            HTMLNode("ol", children=[
+                HTMLNode("li", "First item"),
+                HTMLNode("li", "Second item"),
+                HTMLNode("li", "Third item")
+            ])
+        ])
+
+        mp = MarkdownProcessor(markdown)
+        self.assertEqual(mp.markdown_to_html_node(), expected_return_value)
+
+    def test_paragraph_markdown(self):
+        markdown = "hey this is just a normal paragraph"
+
+        expected_return_value = HTMLNode("div", children=[
+            HTMLNode("p", children=[
+                LeafNode("text", "hey this is just a normal paragraph")
+            ])
+        ])
+
+        mp = MarkdownProcessor(markdown)
+        self.assertEqual(mp.markdown_to_html_node(), expected_return_value)
