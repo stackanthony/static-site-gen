@@ -24,3 +24,27 @@ class TestTextProcessor(unittest.TestCase):
 
         self.assertListEqual(tp.extract_markdown_links(), expectedReturn)
 
+    def test_extract_title(self):
+        text = "# Hello"
+
+        expected_return_value = "Hello"
+
+        tp = TextProcessor(text)
+        self.assertEqual(tp.extract_markdown_title(), expected_return_value)
+
+    def test_extract_title_missing(self):
+        text = " h ello"
+
+        tp = TextProcessor(text)
+        with self.assertRaises(Exception):
+            tp.extract_markdown_title()
+
+    def test_extract_title_multiple(self):
+        text = "## Hello"
+
+        tp = TextProcessor(text)
+        with self.assertRaises(Exception):
+            tp.extract_markdown_title()
+
+if __name__ == "__main__":
+    unittest.main()

@@ -14,6 +14,17 @@ class TextProcessor:
         if not self.text:
             raise ValueError("No text to process")
         return re.findall(r"\[(.*?)\]\((.*?)\)", self.text)
+
+    def extract_markdown_title(self) -> str: 
+        if not self.text:
+            raise ValueError("No text to processs")
+
+        split_text: list[str] = self.text.split(" ")
+
+        if len(split_text) < 2 or split_text[0] != "#":
+            raise ValueError("Not a Valid Title")
+
+        return split_text[1]
     
     def get_trailing_text(self, delimeter: str) -> str | None:
         if not self.text:
