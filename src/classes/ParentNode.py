@@ -6,7 +6,7 @@ class ParentNode(HTMLNode):
     def __init__(self, tag: Optional[str] = None, children: Optional[list[HTMLNode]] = None, props: Optional[dict[str, str]] = None):
         super().__init__(tag, children=children, props=props)
 
-    def to_html(self):
+    def to_html(self) -> str:
         if not self.tag:
             raise ValueError("No tags provided")
         if not self.children:

@@ -17,7 +17,7 @@ class HTMLNode:
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
 
     @abstractmethod
-    def to_html(self):
+    def to_html(self) -> str:
         pass
 
     def props_to_html(self) -> str:
