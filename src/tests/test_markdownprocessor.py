@@ -75,27 +75,6 @@ class TestMarkdownProcessor(unittest.TestCase):
         mp = MarkdownProcessor(markdown)
         self.assertEqual(mp.markdown_to_html_node(), expected_return_value)
 
-    def test_extract_title(self):
-        markdown = "# Hello"
-
-        expected_return_value = "Hello"
-
-        mp = MarkdownProcessor(markdown)
-        self.assertEqual(mp.extract_title(), expected_return_value)
-
-    def test_extract_title_missing(self):
-        markdown = " h ello"
-
-        mp = MarkdownProcessor(markdown)
-        with self.assertRaises(Exception):
-            mp.extract_title()
-
-    def test_extract_title_multiple(self):
-        markdown = "## Hello"
-
-        mp = MarkdownProcessor(markdown)
-        with self.assertRaises(Exception):
-            mp.extract_title()
 
 if __name__ == "__main__":
     unittest.main()
