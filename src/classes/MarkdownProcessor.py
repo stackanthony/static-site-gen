@@ -13,6 +13,14 @@ class MarkdownProcessor:
     def __init__(self, markdown: str):
         self.markdown = markdown
 
+    def extract_title(self) -> str:
+        split_markdown: list[str] = self.markdown.split("#", maxsplit=1)
+        if len(split_markdown) < 2 or split_markdown[0] != "" or split_markdown[1].count("#"):
+            raise Exception("No Title")
+
+        return split_markdown[1].strip()
+
+
     def markdown_to_html_node(self):
         blocks: list[Block] = BlockFactory.create_blocks(self.markdown)
         root_node: HTMLNode = HTMLNode("div")
