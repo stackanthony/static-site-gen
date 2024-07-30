@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Optional
 
 class HTMLNode:
@@ -15,8 +16,9 @@ class HTMLNode:
     def __repr__(self) -> str:
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
 
+    @abstractmethod
     def to_html(self):
-        raise NotImplementedError
+        pass
 
     def props_to_html(self) -> str:
         if not self.props or self.props is {}:
