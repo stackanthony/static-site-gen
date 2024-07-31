@@ -38,7 +38,7 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_props_to_html_boolean_property(self):
         node = HTMLNode(
-            'input', '', props={'type': 'checkbox', 'checked': True}
+            'input', '', props={'type': 'checkbox', 'checked': 'True'}
         )
 
         self.assertEqual(
@@ -52,8 +52,8 @@ class TestHTMLNode(unittest.TestCase):
             props={
                 'type': 'text',
                 'value': 'input value',
-                'required': True,
-                'maxlength': 10,
+                'required': 'True',
+                'maxlength': '10',
             },
         )
 
