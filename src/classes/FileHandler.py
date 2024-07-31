@@ -1,4 +1,6 @@
 import os, shutil
+
+
 class FileHandler:
     def __init__(self) -> None:
         pass
@@ -22,19 +24,21 @@ class FileHandler:
                 FileHandler.create_dir(dest_path)
                 FileHandler.copy_files(source_path, dest_path)
             except Exception as err:
-                print(f"Failed to copy files from {source_path} to {dest_path}. Reason: {err}")
+                print(
+                    f'Failed to copy files from {source_path} to {dest_path}. Reason: {err}'
+                )
                 return False
 
         return True
 
     @staticmethod
     def replace_word_file(read_path: str, dest_path: str, old: str, new: str):
-        with open(read_path, "r") as file:
+        with open(read_path, 'r') as file:
             filedata = file.read()
 
         filedata = filedata.replace(old, new)
 
-        with open(dest_path, "w") as file:
+        with open(dest_path, 'w') as file:
             file.write(filedata)
 
     @staticmethod
@@ -42,9 +46,9 @@ class FileHandler:
         try:
             os.mkdir(path)
         except Exception as err:
-            print(f"Unable to create directory. Reason: {err}")
+            print(f'Unable to create directory. Reason: {err}')
             return False
-        
+
         return True
 
     @staticmethod
@@ -57,8 +61,7 @@ class FileHandler:
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
             except Exception as err:
-                print(f"Failed to delete {file_path}. Reason: {err}")
+                print(f'Failed to delete {file_path}. Reason: {err}')
                 return False
-        
-        return True
 
+        return True

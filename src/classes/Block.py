@@ -13,15 +13,15 @@ class Block:
     @staticmethod
     def markdown_to_blocks(markdown: str) -> list['Block']:
         blocks: list['Block'] = []
-        split_text: list[str] = markdown.split("\n\n")
+        split_text: list[str] = markdown.split('\n\n')
 
         for text in split_text:
-            if text == "":
+            if text == '':
                 continue
             blocks.append(Block(text.strip()))
 
         return blocks
-    
+
     @abstractmethod
     def build(self) -> 'Block':
         pass
