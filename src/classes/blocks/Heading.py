@@ -9,11 +9,13 @@ class Heading(Block):
 
     @staticmethod
     def is_heading(block: Block) -> bool:
-        hash_count = block.text.split()[0].count("#")
-        return hash_count <= 6 and hash_count >= 1 and block.text.count("# ") == 1
+        hash_count = block.text.split()[0].count('#')
+        return (
+            hash_count <= 6 and hash_count >= 1 and block.text.count('# ') == 1
+        )
 
     def build(self) -> Block:
-        split_block_text: list[str] = self.text.split(" ", maxsplit=1)
+        split_block_text: list[str] = self.text.split(' ', maxsplit=1)
 
         if len(split_block_text) < 2:
             raise ValueError

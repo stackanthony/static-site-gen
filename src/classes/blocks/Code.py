@@ -7,12 +7,12 @@ class Code(Block):
 
     @staticmethod
     def is_code(block: Block) -> bool:
-        split_block_text: list[str] = block.text.split("```")
+        split_block_text: list[str] = block.text.split('```')
 
-        return split_block_text[0] == "" and split_block_text[-1] == ""
+        return split_block_text[0] == '' and split_block_text[-1] == ''
 
     def build(self) -> Block:
-        split_block_text: list[str] = self.text.split("```")
+        split_block_text: list[str] = self.text.split('```')
 
         if len(split_block_text) < 2:
             raise ValueError

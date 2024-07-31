@@ -6,8 +6,8 @@ from src.classes.blocks.Paragraph import Paragraph
 from src.classes.blocks.Quote import Quote
 from src.classes.blocks.UnorderedList import UnorderedList
 
+
 class BlockFactory:
-    
     @staticmethod
     def create_blocks(markdown: str) -> list[Block]:
         blocks: list[Block] = Block.markdown_to_blocks(markdown)
@@ -26,6 +26,5 @@ class BlockFactory:
                 processed_blocks.append(OrderedList(block.text).build())
             else:
                 processed_blocks.append(Paragraph(block.text))
-
 
         return processed_blocks
