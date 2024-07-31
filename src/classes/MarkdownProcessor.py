@@ -21,6 +21,8 @@ class MarkdownProcessor:
 
         for block in blocks:
             new_node: ParentNode | None = None
+            block.text = block.text.strip()
+
             if isinstance(block, Heading):
                 new_node = ParentNode(f'h{block.count}')
                 new_node.children = [
