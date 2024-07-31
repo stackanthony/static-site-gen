@@ -27,6 +27,15 @@ class FileHandler:
 
         return True
 
+    @staticmethod
+    def replace_word_file(read_path: str, dest_path: str, old: str, new: str):
+        with open(read_path, "r") as file:
+            filedata = file.read()
+
+        filedata = filedata.replace(old, new)
+
+        with open(dest_path, "w") as file:
+            file.write(filedata)
 
     @staticmethod
     def create_dir(path: str) -> bool:
