@@ -105,6 +105,19 @@ class TestTextNode(unittest.TestCase):
 
         self.assertEqual(str(new_nodes), expected_return_value)
 
+    def test_split_nodes_delimeter_multiple_italic_types(self):
+        node = TextNode('This is a _text_ node with *italic text*', 'text')
+        new_nodes = TextNode.split_nodes_delimiter([node], '*', 'italic')
+
+        expected_return_value = [
+            TextNode('This is a ', 'text'),
+            TextNode('text', 'italic'),
+            TextNode(' node with ', 'text'),
+            TextNode('italic text', 'italic'),
+        ]
+
+        self.assertListEqual(new_nodes, expected_return_value)
+
     def test_invalid_text_type(self):
         node = TextNode()
         with self.assertRaises(ValueError):

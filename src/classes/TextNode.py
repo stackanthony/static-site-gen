@@ -1,4 +1,5 @@
 from typing import Optional
+import re
 
 from src.classes.LeafNode import LeafNode
 from src.classes.TextProcessor import TextProcessor
@@ -25,28 +26,28 @@ class TextNode:
         return f'TextNode({self.text}, {self.text_type}, {self.url})'
 
     def text_node_to_html_node(self) -> LeafNode:
-        match self.text_type:
-            case 'text':
-                return LeafNode('text', self.text)
-            case 'bold':
-                return LeafNode('b', self.text)
-            case 'italic':
-                return LeafNode('i', self.text)
-            case 'code':
-                return LeafNode('code', self.text)
-            case 'link':
-                if not self.url:
-                    raise ValueError('No URL to parse')
-                return LeafNode('a', self.text, {'href': self.url})
-            case 'image':
-                if not self.url:
-                    raise ValueError('No Image URL in Node')
-                return LeafNode('img', '', {'src': self.url})
-            case _:
-                raise Exception(
-                    "Not a valid text type. Couldn't convert to LeafNode"
-                )
+        if self.text_type == 'text':
+            return LeafNode('text', self.text)
+        elif self.text_type == 'bold':
+            return LeafNode('b', self.text)
+        elif self.text_type == 'italic':
+            return LeafNode('i', self.text)
+        elif self.text_type == 'code':
+            return LeafNode('code', self.text)
+        elif self.text_type == 'link':
+            if not self.url:
+                raise ValueError('No URL to parse')
+            return LeafNode('a', self.text, {'href': self.url})
+        elif self.text_type == 'image':
+            if not self.url:
+                raise ValueError('No Image URL in Node')
+            return LeafNode('img', '', {'src': self.url})
+        else:
+            raise Exception(
+                "Not a valid text type. Couldn't convert to LeafNode"
+            )
 
+    # FIX: Underscore italic text not supported currently.
     @staticmethod
     def text_to_textnodes(text: str) -> list['TextNode']:
         if text == '':
@@ -84,20 +85,27 @@ class TextNode:
         old_nodes: list['TextNode'], delimeter: str, text_type: str
     ) -> list['TextNode']:
         new_nodes: list['TextNode'] = []
-        text_types: dict[str, str] = {
+        text_types: dict[str, str | set[str]] = {
             'bold': '**',
-            'italic': '*',
+            'italic': {'*', '_'},
             'code': '`',
         }
 
         if text_type not in text_types:
             raise ValueError(f'{text_type} - not a valid text type to convert')
 
-        if delimeter not in text_types.values():
+        if (
+            delimeter not in text_types.values()
+            and delimeter not in text_types['italic']
+        ):
             raise ValueError(f'{delimeter} - not a valid delimeter to convert')
 
         for node in old_nodes:
-            split_nodes_text: list[str] = node.text.split(delimeter)
+            split_nodes_text: list[str] = (
+                re.split(r'\*|_', node.text)
+                if text_type == 'italic'
+                else node.text.split(delimeter)
+            )
 
             if len(split_nodes_text) > 2:
                 # valid delimeter enclosed word
