@@ -49,7 +49,12 @@ class MarkdownProcessor:
                 root_list_node = ParentNode('ul')
 
                 for item in block.items:
-                    child_list_node = LeafNode('li', item)
+                    child_list_node = ParentNode('li')
+
+                    child_list_node.children = [
+                        text_node.text_node_to_html_node()
+                        for text_node in TextNode.text_to_textnodes(item)
+                    ]
                     root_list_node.children.append(child_list_node)
 
                 root_node.children.append(root_list_node)
@@ -57,7 +62,13 @@ class MarkdownProcessor:
                 root_list_node = ParentNode('ol')
 
                 for item in block.items:
-                    child_list_node = LeafNode('li', item)
+                    child_list_node = ParentNode('li')
+
+                    child_list_node.children = [
+                        text_node.text_node_to_html_node()
+                        for text_node in TextNode.text_to_textnodes(item)
+                    ]
+
                     root_list_node.children.append(child_list_node)
 
                 root_node.children.append(root_list_node)
