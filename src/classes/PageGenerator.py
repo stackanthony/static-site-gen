@@ -7,7 +7,6 @@ class PageGenerator:
     def __init__(self) -> None:
         pass
 
-    # BUG: Does not work currently with _italic text_ at the minute. Only works with *italic*
     @staticmethod
     def generate_page(from_path: str, template_path: str, dest_path: str):
         print(

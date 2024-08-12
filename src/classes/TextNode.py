@@ -47,7 +47,6 @@ class TextNode:
                 "Not a valid text type. Couldn't convert to LeafNode"
             )
 
-    # FIX: Underscore italic text not supported currently.
     @staticmethod
     def text_to_textnodes(text: str) -> list['TextNode']:
         if text == '':
@@ -79,6 +78,10 @@ class TextNode:
             pass
 
         return text_nodes
+
+    @staticmethod
+    def contains_special(text: str):
+        return len(TextNode.text_to_textnodes(text)) > 1
 
     @staticmethod
     def split_nodes_delimiter(
