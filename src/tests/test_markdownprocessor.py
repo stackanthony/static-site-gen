@@ -67,14 +67,52 @@ class TestMarkdownProcessor(unittest.TestCase):
                 HTMLNode(
                     'ul',
                     children=[
-                        HTMLNode('li', 'First item'),
-                        HTMLNode('li', 'Second item'),
-                        HTMLNode('li', 'Third item'),
+                        HTMLNode(
+                            'li', children=[HTMLNode('text', 'First item')]
+                        ),
+                        HTMLNode(
+                            'li', children=[HTMLNode('text', 'Second item')]
+                        ),
+                        HTMLNode(
+                            'li', children=[HTMLNode('text', 'Third item')]
+                        ),
                     ],
                 )
             ],
         )
 
+        mp = MarkdownProcessor(markdown)
+        self.assertEqual(mp.markdown_to_html_node(), expected_return_value)
+
+    def test_unordered_list_markdown_special_text(self):
+        markdown = '- This is _italic_ text\n- Second item\n- Third item'
+
+        expected_return_value = HTMLNode(
+            'div',
+            children=[
+                HTMLNode(
+                    'ul',
+                    children=[
+                        HTMLNode(
+                            'li',
+                            children=[
+                                HTMLNode('text', 'This is '),
+                                HTMLNode('i', 'italic'),
+                                HTMLNode('text', ' text'),
+                            ],
+                        ),
+                        HTMLNode(
+                            'li',
+                            children=[HTMLNode('text', 'Second item')],
+                        ),
+                        HTMLNode(
+                            'li',
+                            children=[HTMLNode('text', 'Third item')],
+                        ),
+                    ],
+                )
+            ],
+        )
         mp = MarkdownProcessor(markdown)
         self.assertEqual(mp.markdown_to_html_node(), expected_return_value)
 
@@ -87,9 +125,15 @@ class TestMarkdownProcessor(unittest.TestCase):
                 HTMLNode(
                     'ol',
                     children=[
-                        HTMLNode('li', 'First item'),
-                        HTMLNode('li', 'Second item'),
-                        HTMLNode('li', 'Third item'),
+                        HTMLNode(
+                            'li', children=[HTMLNode('text', 'First item')]
+                        ),
+                        HTMLNode(
+                            'li', children=[HTMLNode('text', 'Second item')]
+                        ),
+                        HTMLNode(
+                            'li', children=[HTMLNode('text', 'Third item')]
+                        ),
                     ],
                 )
             ],
