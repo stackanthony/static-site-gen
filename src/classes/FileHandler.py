@@ -32,6 +32,18 @@ class FileHandler:
         return True
 
     @staticmethod
+    def list_dir_entries(path: str) -> list[str]:
+        # check if dir param is a valid directory
+        if not os.path.isdir(path):
+            raise Exception('Not a valid directory path')
+
+        return os.listdir(path)
+
+    @staticmethod
+    def is_file(file_path: str) -> bool:
+        return os.path.isfile(file_path)
+
+    @staticmethod
     def replace_word_file(read_path: str, dest_path: str, old: str, new: str):
         with open(read_path, 'r') as file:
             filedata = file.read()
@@ -42,9 +54,18 @@ class FileHandler:
             file.write(filedata)
 
     @staticmethod
+    def write_to_file(content: str, dest_path: str):
+        try:
+            with open(dest_path, "w") as file:
+                file.write(content)
+        except Exception as err:
+            print(f"Unable to write to file. Reason: {err}")
+
+    @staticmethod
     def create_dir(path: str) -> bool:
         try:
             os.mkdir(path)
+            print(f"Created Directory: {path}")
         except Exception as err:
             print(f'Unable to create directory. Reason: {err}')
             return False
@@ -53,6 +74,7 @@ class FileHandler:
 
     @staticmethod
     def delete_files(dir: str) -> bool:
+        print(f"Deleting files from {dir}")
         for file_name in os.listdir(dir):
             file_path = os.path.join(dir, file_name)
             try:
