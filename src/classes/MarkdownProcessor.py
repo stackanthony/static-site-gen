@@ -1,12 +1,12 @@
 from src.classes.Block import Block
 from src.classes.HTMLNode import HTMLNode
-from src.classes.LeafNode import LeafNode
 from src.classes.ParentNode import ParentNode
 from src.classes.TextNode import TextNode
 from src.classes.blocks.BlockFactory import BlockFactory
 from src.classes.blocks.Code import Code
 from src.classes.blocks.Heading import Heading
 from src.classes.blocks.OrderedList import OrderedList
+from src.classes.blocks.Paragraph import Paragraph
 from src.classes.blocks.UnorderedList import UnorderedList
 from src.classes.blocks.Quote import Quote
 
@@ -72,12 +72,14 @@ class MarkdownProcessor:
                     root_list_node.children.append(child_list_node)
 
                 root_node.children.append(root_list_node)
-            else:
+            elif isinstance(block, Paragraph):
                 new_node = ParentNode('p')
-                new_node.children = [
-                    text_node.text_node_to_html_node()
-                    for text_node in TextNode.text_to_textnodes(block.text)
-                ]
+                for text_node in TextNode.text_to_textnodes(block.text):
+                    if text_node.text == '':
+                        continue
+                    new_node.children.append(
+                        text_node.text_node_to_html_node()
+                    )
                 root_node.children.append(new_node)
 
         return root_node
