@@ -49,9 +49,6 @@ class TextNode:
 
     @staticmethod
     def text_to_textnodes(text: str) -> list['TextNode']:
-        if text == '':
-            return []
-
         text_nodes: list['TextNode'] = [TextNode(text, 'text')]
         try:
             for bold_node in TextNode.split_nodes_delimiter(
@@ -74,7 +71,7 @@ class TextNode:
 
             for link_node in TextNode.split_nodes_link([text_nodes.pop()]):
                 text_nodes.append(link_node)
-        except:
+        except Exception:
             pass
 
         return text_nodes
@@ -85,7 +82,7 @@ class TextNode:
 
     @staticmethod
     def split_nodes_delimiter(
-        old_nodes: list['TextNode'], delimeter: str, text_type: str
+        old_nodes: list['TextNode'], delimiter: str, text_type: str
     ) -> list['TextNode']:
         new_nodes: list['TextNode'] = []
         text_types: dict[str, str | set[str]] = {
@@ -93,21 +90,20 @@ class TextNode:
             'italic': {'*', '_'},
             'code': '`',
         }
-
         if text_type not in text_types:
             raise ValueError(f'{text_type} - not a valid text type to convert')
 
         if (
-            delimeter not in text_types.values()
-            and delimeter not in text_types['italic']
+            delimiter not in text_types.values()
+            and delimiter not in text_types['italic']
         ):
-            raise ValueError(f'{delimeter} - not a valid delimeter to convert')
+            raise ValueError(f'{delimiter} - not a valid delimiter to convert')
 
         for node in old_nodes:
             split_nodes_text: list[str] = (
-                re.split(r'\*|_', node.text)
+                re.split(r'[_*](.*?)[_*]', node.text)
                 if text_type == 'italic'
-                else node.text.split(delimeter)
+                else node.text.split(delimiter)
             )
 
             if len(split_nodes_text) > 2:
@@ -158,7 +154,7 @@ class TextNode:
                             continue
 
                         new_nodes.append(TextNode(trailing_text, 'text'))
-                    except:
+                    except Exception:
                         continue
             else:
                 new_nodes.append(node)
@@ -202,7 +198,7 @@ class TextNode:
                         continue
 
                     new_nodes.append(TextNode(trailing_text, 'text'))
-            except:
+            except Exception:
                 continue
 
         return new_nodes
