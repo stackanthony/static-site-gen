@@ -340,6 +340,23 @@ class TestTextNode(unittest.TestCase):
             TextNode.split_nodes_link([node]), expected_return_list
         )
 
+    def test_split_nodes_link_with_special_chars(self):
+        node = TextNode(
+            'You can find the [wiki here](https://lotr.fandom.com/wiki/Main_Page).'
+        )
+
+        expected_return_list = [
+            TextNode('You can find the ', 'text'),
+            TextNode(
+                'wiki here', 'link', 'https://lotr.fandom.com/wiki/Main_Page'
+            ),
+            TextNode('.', 'text'),
+        ]
+
+        self.assertListEqual(
+            TextNode.split_nodes_link([node]), expected_return_list
+        )
+
     def test_text_to_textnodes(self):
         test_text = 'This is **text** with an *italic* word and a `code block` and an ![image](https://obiwan-image) and a [link](https://stackanthony.dev)'
 
@@ -354,6 +371,26 @@ class TestTextNode(unittest.TestCase):
             TextNode('image', 'image', 'https://obiwan-image'),
             TextNode(' and a ', 'text'),
             TextNode('link', 'link', 'https://stackanthony.dev'),
+        ]
+
+        self.assertListEqual(
+            TextNode.text_to_textnodes(test_text), expected_return_list
+        )
+
+    def test_italics_in_link_text_to_textnodes(self):
+        test_text = 'In the annals of fantasy literature and the broader realm of creative world-building, few sagas can rival the intricate tapestry woven by J.R.R. Tolkien in _The Lord of the Rings_. You can find the [wiki here](https://lotr.fandom.com/wiki/Main_Page).'
+
+        expected_return_list = [
+            TextNode(
+                'In the annals of fantasy literature and the broader realm of creative world-building, few sagas can rival the intricate tapestry woven by J.R.R. Tolkien in ',
+                'text',
+            ),
+            TextNode('The Lord of the Rings', 'italic'),
+            TextNode('. You can find the ', 'text'),
+            TextNode(
+                'wiki here', 'link', 'https://lotr.fandom.com/wiki/Main_Page'
+            ),
+            TextNode('.', 'text'),
         ]
 
         self.assertListEqual(
