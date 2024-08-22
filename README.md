@@ -63,7 +63,7 @@ Before you begin, ensure that you have the following prerequisites installed:
 
 ### 📦 Installation
 
-1. Clone the amztools repository:
+1. Clone the static-site-gen repository:
 
 ```sh
 git clone https://github.com/stackanthony/static-site-gen
