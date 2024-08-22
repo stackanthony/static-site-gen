@@ -112,6 +112,10 @@ git push origin new-feature-branch
 
 ---
 
+## Notes
+
+- The static/, content/, and public/ directories are all in here for demo-purposes. You can use these directories exactly how they're used in the GIF in the README to get some first-hand experience on how this tool works.
+
 ## 📄 License
 
 This project is licensed under the `MIT` License.
